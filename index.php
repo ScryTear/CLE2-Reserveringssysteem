@@ -2,6 +2,19 @@
 
 function build_calendar($month, $year)
 {
+    $mysqli = new mysqli('localhost', 'root', '', 'reservations');
+    $stmt = $mysqli->prepare("select * from meetings where MONTH(date) = ? AND YEAR(date)=?");
+    $stmt->bind_param('ss', $month, $year);
+    $meetings = array();
+    if($stmt->execute()){
+        $result = $stmt->get_result();
+        if($result->num_rows>0){
+            while($row = $result->fetch_assoc()){
+                $meetings[] = $row['date'];
+            }
+            $stmt->close();
+        }
+    }
 
     //First, create an array containing the names of all the days in a week
     $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -65,7 +78,10 @@ function build_calendar($month, $year)
         // that way, you will only be able to book on dates that seem logical
         if($date<date('Y-m-d')){
             $calendar.="<td><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>N/A</button>";
-        }else{
+        }elseif (in_array($date, $meetings)){
+            $calendar.="<td class='$today'><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>Already Booked</button>";
+        }
+        else{
             $calendar.="<td class='$today'><h4>$currentDay</h4> <a href='bookMeeting.php?date=".$date."' class='btn btn-success btn-xs'>Book</a>";
         }
         //Increment counters
