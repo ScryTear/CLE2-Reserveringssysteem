@@ -1,4 +1,10 @@
 <?php
+
+/** @var mysqli $db */
+
+//Require DB settings with connection variable
+require_once "includes/db-connections.php";
+
 if(isset($_GET['date'])){
     $date = $_GET['date'];
 }
