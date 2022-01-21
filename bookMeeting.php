@@ -3,6 +3,7 @@ if(isset($_GET['date'])){
     $date = $_GET['date'];
 }
 
+//stuur het door naar de database
 if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $mysqli = new mysqli('localhost', 'root', '', 'reservations');

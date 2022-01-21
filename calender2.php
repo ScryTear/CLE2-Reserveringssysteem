@@ -2,19 +2,35 @@
 
 function build_calendar($month, $year)
 {
+
+    //First, create an array containing the names of all the days in a week
     $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+
+    //Then we get the first day of the month in the function
     $firstDayOfMonth = mktime(0, 0, 0, $month, 1, $year);
+
+    //number of days in a month
     $numberDays = date('t', $firstDayOfMonth);
+
+    //Getting some information about the first day of this month
     $dateComponents = getdate($firstDayOfMonth);
+
+    //Get the name of this month
     $monthName = $dateComponents['month'];
+
+    //Get the index value of 0-6 of the first day of the month
     $dayOfWeek = $dateComponents['wday'];
+
+    //The current date
     $datetoday = date('Y-m-d');
 
+    //make references to next month, previous month and this month
     $prevMonth = date('m', mktime(0, 0, 0, $month-1, 1, $year));
     $prevYear = date('Y', mktime(0, 0, 0, $month-1, 1, $year));
     $nextMonth = date('m', mktime(0, 0, 0, $month+1, 1, $year));
     $nextYear = date('Y', mktime(0, 0, 0, $month+1, 1, $year));
     $calendar = "<center><h2>$monthName $year</h2>";
+
     $calendar .= "<a class='btn btn=primary btn-xs' href='?month=".$prevMonth."&year=".$prevYear."'>prev Month</a> ";
     $calendar .= "<a class='btn btn=primary btn-xs' href='?month=".date('m')."&year=".date('Y')."'>Current Month </a> ";
     $calendar .= "<a class='btn btn=primary btn-xs' href='?month=".$nextMonth."&year=".$nextYear."'>next Month </a></center>";
@@ -45,7 +61,8 @@ function build_calendar($month, $year)
 
         $today = $date==date('Y-m-d')? 'today' : '';
 
-
+        // make buttons that will not be interactive after a certain date (yesterday) and booking for dates that are higher than yesterday
+        // that way, you will only be able to book on dates that seem logical
         if($date<date('Y-m-d')){
             $calendar.="<td><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>N/A</button>";
         }else{
